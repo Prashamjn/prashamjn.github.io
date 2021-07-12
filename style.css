@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+SC&display=swap');
+
+*{
+    font-family: 'Encode Sans SC', sans-serif;
+}
+
+body{
+    background-image: linear-gradient(to right, #00C9FF, #92FE9D);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;  
+}
+
+.btn {
+    background-color: blue;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 20px;
+    transition: 0.5s;
+  }
+  
+  .btn:hover {
+    background-color: red;
+    transition: 0.5s;
+  }
