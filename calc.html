@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="css/calc.css">
+</head>
+<body>
+    <div class="wrapper">
+        <section class="screen">
+            <input type="text" id="result">
+        </section>
+
+        <section class="calcButtons">
+            <div class="calcButtonRow">
+                <button class="calcButton double" onclick="clearResult()">
+                    C
+                </button>
+                <button clas="calcButton" onclick="clearEntry()">
+                    &larr;
+                </button>
+                <button clas="calcButton" onclick="addToResult('/')">
+                    &divide;
+                </button>
+            </div>
+            <div class="calcButtonRow">
+                <button clas="calcButton" onclick="addToResult('7')">
+                    7
+                </button>      
+                <button clas="calcButton" onclick="addToResult('8')">
+                    8
+                </button>
+                <button clas="calcButton" onclick="addToResult('9')">
+                    9
+                </button>
+                <button clas="calcButton" onclick="addToResult('*')">
+                    &times;
+                </button>
+            </div>
+            <div class="calcButtonRow">
+                <button clas="calcButton" onclick="addToResult('4')">
+                    4
+                </button>
+                <button clas="calcButton" onclick="addToResult('5')">
+                    5
+                </button>
+                <button clas="calcButton" onclick="addToResult('6')">
+                    6
+                </button>
+                <button clas="calcButton" onclick="addToResult('-')">
+                    &minus;
+                </button>
+            </div>
+            <div class="calcButtonRow">
+                <button clas="calcButton" onclick="addToResult('1')">
+                    1
+                </button>
+                <button clas="calcButton" onclick="addToResult('2')">
+                    2
+                </button>
+                <button clas="calcButton" onclick="addToResult('3')">
+                    3
+                </button>
+                <button clas="calcButton" onclick="addToResult('+')">
+                    &plus;
+                </button>
+            </div>
+            <div class="calcButtonRow">
+                <button clas="calcButton" id="triple" onclick="addToResult('0')">
+                    0
+                </button>
+                <button clas="calcButton" onclick="calculateResult()">
+                    &equals;
+                </button>
+            </div>
+        </section>
+    </div>
+    <script src="js/calc.js"></script>
+</body>
+</html>
