@@ -10,12 +10,12 @@
 <body>
     <div class="wrapper">
         <section class="screen">
-            <input type="text" id="result">
+            <input type="text" id="result" disabled>
         </section>
 
         <section class="calcButtons">
             <div class="calcButtonRow">
-                <button class="calcButton double" onclick="clearResult()">
+                <button class="calcButton" id="double" onclick="clearResult()">
                     C
                 </button>
                 <button clas="calcButton" onclick="clearEntry()">
@@ -68,10 +68,13 @@
                 </button>
             </div>
             <div class="calcButtonRow">
-                <button clas="calcButton" id="triple" onclick="addToResult('0')">
+                <button clas="calcButton" onclick="addToResult('0')">
                     0
                 </button>
-                <button clas="calcButton" onclick="calculateResult()">
+                <button class="calcButton" onclick="addToResult('.')">
+                    .
+                </button>
+                <button clas="calcButton" id="double" onclick="calculateResult()">
                     &equals;
                 </button>
             </div>

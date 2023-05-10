@@ -72,7 +72,7 @@ button{
     height: 65px;
 }
 
-button:last-child{
+button:last-child, #percent{
     backdrop-filter: blur(5.5px);
     -webkit-backdrop-filter: blur(5.5px);
     background: rgba(255,255,255,0.75);
@@ -83,7 +83,7 @@ button:last-child{
     background: #d72880;
 }
 
-button:last-child:hover{
+button:last-child:hover, #percent:hover{
     background: inherit;
     color: inherit;
 }
@@ -96,10 +96,6 @@ button:active{
     background: #ffef78;
 }
 
-.double{
+#double{
     flex-basis: 47%;
-}
-
-#triple{
-    flex-basis: 73%;
 }
