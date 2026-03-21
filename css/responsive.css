@@ -1,0 +1,519 @@
+/* ============================================================
+   responsive.css — Full Mobile-First Responsive System
+   Breakpoints:
+     xs:  < 480px  (small phones)
+     sm:  480–767px (large phones)
+     md:  768–1023px (tablets / landscape phones)
+     lg:  1024–1279px (small laptops)
+     xl:  ≥ 1280px (desktops) ← base styles already cover this
+   ============================================================ */
+
+/* ══════════════════════════════════════════════════════════════
+   GLOBAL TOUCH & MOBILE BASELINE
+══════════════════════════════════════════════════════════════ */
+* { -webkit-tap-highlight-color: transparent; }
+
+/* Prevent iOS input zoom (inputs must be ≥16px on iOS) */
+input, select, textarea { font-size: 16px !important; }
+
+/* Safe area insets for notched phones */
+.page-wrapper { padding-bottom: env(safe-area-inset-bottom); }
+.room-nav     { padding-top: max(.75rem, env(safe-area-inset-top)); }
+
+/* Touch targets — minimum 44px */
+.btn, .btn-icon, .emoji-btn, .queue-item,
+.team-player-row, .cc-player, .rsq-player { min-height: 44px; }
+.auth-tab, .queue-mode-btn              { min-height: 48px; }
+
+/* Prevent text overflow everywhere */
+.member-name, .qi-name, .team-owner, .lb-name,
+.flb-name, .rpc-name, .rsq-name, .rcc-name    { overflow-wrap: break-word; word-break: break-word; }
+
+/* ══════════════════════════════════════════════════════════════
+   DESKTOP BASELINE FIX (ensure 3-column layout works cleanly)
+══════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .room-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr 260px;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+  }
+  .panel-left, .panel-right {
+    overflow-y: auto;
+    height: 100%;
+  }
+  .panel-center {
+    overflow-y: auto;
+    height: 100%;
+  }
+  /* Hide mobile tab nav on desktop */
+  .mobile-tab-nav { display: none !important; }
+  /* Show all panels on desktop */
+  .panel-left, .panel-right, .panel-center { display: flex !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TABLET LANDSCAPE  (md: 768–1023px)
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 1023px) {
+  /* 2-column layout: center takes most space */
+  .room-layout {
+    grid-template-columns: 1fr 220px;
+    grid-template-rows: auto;
+    height: calc(100vh - 56px);
+    overflow: hidden;
+  }
+  .panel-left  {
+    display: none !important; /* Hidden on tablet, accessible via tab */
+    grid-column: 1 / -1;
+  }
+  .panel-center {
+    grid-column: 1;
+    overflow-y: auto;
+  }
+  .panel-right {
+    grid-column: 2;
+    border-left: 1px solid var(--border);
+    overflow-y: auto;
+  }
+  /* Auction hero size adjustments */
+  .player-big-name  { font-size: 1.5rem; }
+  #currentBidDisplay { font-size: 3rem; }
+  /* Timer smaller */
+  .timer-svg-wrap { width: 80px; height: 80px; }
+  .timer-svg      { width: 80px; height: 80px; }
+  .timer-number   { font-size: 1.8rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE (sm + xs: < 768px)  ← The main mobile treatment
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+
+  /* ── NAV ── */
+  .room-nav {
+    padding: .6rem .75rem;
+    gap: .4rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+  .nav-brand { font-size: 1rem; flex-shrink: 0; }
+  #navUserName { display: none; } /* Hidden on mobile — saves space */
+  .room-code-chip {
+    padding: .25rem .6rem;
+    border-radius: 100px;
+  }
+  .rcc-label { display: none; }
+  .rcc-val { font-size: .8rem; letter-spacing: .1em; }
+  #myBudgetDisplay { display: none; } /* Shown in squad status instead */
+  .nav-right { gap: .3rem; }
+  .btn-icon { padding: .4rem .5rem; font-size: .85rem; min-height: 36px; }
+  #themeSwitcher .theme-btn { padding: .3rem .4rem; font-size: .85rem; }
+
+  /* ── MOBILE LAYOUT: single column with tab switcher ── */
+  .room-layout {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 56px - 56px); /* nav + tab bar */
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Hide all panels by default on mobile */
+  .panel-left,
+  .panel-center,
+  .panel-right {
+    display: none !important;
+    flex-direction: column;
+    overflow-y: auto;
+    flex: 1;
+    padding: .75rem;
+    gap: .75rem;
+    height: 100%;
+    border: none !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Active panel shown */
+  .panel-left.mob-active,
+  .panel-center.mob-active,
+  .panel-right.mob-active {
+    display: flex !important;
+  }
+
+  /* ── MOBILE TAB NAVIGATION ── */
+  .mobile-tab-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 99;
+    background: rgba(4, 6, 14, .97);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    padding: .4rem .5rem calc(.4rem + env(safe-area-inset-bottom));
+    gap: .25rem;
+  }
+  .mob-tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .2rem;
+    padding: .4rem .25rem;
+    border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--text3);
+    font-family: var(--ff);
+    font-size: .6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    cursor: pointer;
+    transition: all .2s;
+    min-height: 44px;
+  }
+  .mob-tab-btn .mti { font-size: 1.2rem; line-height: 1; }
+  .mob-tab-btn.mob-tab-active {
+    background: rgba(0,212,170,.12);
+    color: var(--green);
+  }
+  .mob-tab-btn.mob-tab-bid {
+    background: rgba(245,158,11,.12);
+    color: var(--gold);
+    border: 1px solid rgba(245,158,11,.25);
+    transform: scale(1.05);
+  }
+  .mob-tab-btn.mob-tab-bid.mob-tab-active {
+    background: linear-gradient(135deg, rgba(245,158,11,.25), rgba(245,158,11,.15));
+    color: var(--gold);
+    box-shadow: 0 0 12px rgba(245,158,11,.3);
+  }
+
+  /* ── CENTER PANEL mobile ── */
+  .panel-center .g-card { border-radius: var(--r12); padding: .9rem; }
+
+  /* Player card — more compact */
+  .player-stage { gap: .4rem; padding: .1rem 0; }
+  .player-click-hint { font-size: .58rem; }
+  .player-circle { width: 80px; height: 80px; font-size: 1.6rem; }
+  .player-flag-badge { font-size: 1.1rem; }
+  .player-big-name { font-size: 1.4rem; }
+  .player-chips-row { gap: .3rem; }
+  .chip-role, .chip-country, .chip-overseas, .chip-domestic { font-size: .65rem; padding: .2rem .5rem; }
+  .rating-val { font-size: .9rem; }
+  .base-price-tag { font-size: .68rem; }
+  .player-queue-badge { font-size: .6rem; padding: .15rem .4rem; }
+  .player-category-chip { font-size: .62rem; }
+
+  /* Timer — compact horizontal layout */
+  .timer-wrap { gap: .75rem; }
+  .timer-svg-wrap { width: 72px; height: 72px; flex-shrink: 0; }
+  .timer-svg { width: 72px; height: 72px; }
+  .timer-number { font-size: 1.6rem; }
+  .timer-sub-label { font-size: .5rem; }
+  .timer-info-col { font-size: .78rem; }
+  .timer-info-title { font-size: .8rem; }
+
+  /* Bid area */
+  #currentBidDisplay { font-size: clamp(2.5rem, 10vw, 4rem); }
+  .bid-section { gap: .75rem; }
+  .btn-bid { font-size: 1.1rem; padding: 1rem; border-radius: var(--r12); }
+  .bidder-display { padding: .55rem .75rem; }
+  .bidder-name { font-size: .9rem; }
+
+  /* Squad status — show budget here on mobile */
+  .squad-grid { grid-template-columns: repeat(2, 1fr); gap: .4rem; }
+  .sq-val { font-size: .82rem; }
+  .squad-warn { font-size: .68rem; }
+
+  /* Host panel */
+  .hcp-btns { flex-wrap: wrap; gap: .35rem; }
+  .hcp-btn  { font-size: .78rem; padding: .45rem .75rem; flex: 1; min-width: 70px; }
+
+  /* Smart suggestion */
+  .ss-text { font-size: .78rem; }
+
+  /* ── LEFT PANEL (Chat + Queue) mobile ── */
+  #queuePreview { display: none; } /* Queue preview hidden on mobile — saves vertical space */
+  #chatFeed { max-height: 220px; min-height: 120px; }
+  .chat-bubble { font-size: .8rem; padding: .4rem .6rem; }
+  .chat-sender { font-size: .6rem; }
+  .chat-time { font-size: .58rem; }
+  .chat-input-row { gap: .3rem; }
+  #chatInput { font-size: 16px !important; padding: .5rem .65rem; }
+  #chatSendBtn { padding: .5rem .75rem; }
+  #emojiRow { gap: .2rem; }
+  .emoji-btn { font-size: .85rem; padding: .25rem .4rem; }
+
+  /* ── RIGHT PANEL (Leaderboard + Teams) mobile ── */
+  .lb-row { padding: .5rem .35rem; }
+  .lb-avatar { width: 28px; height: 28px; font-size: .68rem; }
+  .lb-name { font-size: .8rem; }
+  .lb-budget, .lb-spent, .lb-grade { font-size: .65rem; }
+  .lb-count { font-size: .8rem; }
+  .team-panel { border-radius: var(--r12); }
+  .team-players-list { max-height: 160px; }
+  .team-player-row { font-size: .75rem; padding: .3rem .4rem; }
+
+  /* Sold overlay — full screen on mobile */
+  .sold-card { padding: 2rem 1.5rem; max-width: calc(100vw - 2rem); }
+  .sold-word { font-size: 3rem; }
+  .sold-price { font-size: 2rem; }
+
+  /* Lobby */
+  .members-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: .5rem; }
+  .member-avatar { width: 36px; height: 36px; font-size: .8rem; }
+  .member-name { font-size: .82rem; }
+  .room-fullwidth { padding: .75rem; gap: .75rem; }
+  .g-card { padding: 1rem; }
+
+  /* Toasts — bottom center on mobile */
+  #toastContainer {
+    bottom: 72px; /* above tab nav */
+    left: 1rem;
+    right: 1rem;
+    max-width: 100%;
+    align-items: center;
+  }
+  .toast { min-width: 0; width: 100%; max-width: 340px; font-size: .82rem; }
+
+  /* Paused banner */
+  #pausedBanner { font-size: .82rem; padding: .5rem .75rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SMALL PHONES (xs: < 480px)
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 479px) {
+  .room-nav { padding: .5rem .6rem; }
+  .nav-brand { font-size: .9rem; }
+  .rcc-val { font-size: .75rem; }
+  .player-big-name { font-size: 1.2rem; }
+  #currentBidDisplay { font-size: 2.5rem; }
+  .btn-bid { font-size: 1rem; padding: .85rem; }
+  .timer-svg-wrap { width: 64px; height: 64px; }
+  .timer-svg { width: 64px; height: 64px; }
+  .timer-number { font-size: 1.4rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOME PAGE — RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .home-page { padding: 1.25rem 1rem; gap: 1.25rem; }
+  .home-logo { font-size: clamp(2.5rem, 11vw, 5rem); }
+  .home-logo-sub { font-size: .75rem; letter-spacing: .25em; }
+  .home-tagline { font-size: .75rem; }
+  .home-hero { margin-bottom: 0; }
+
+  .auth-wrapper { max-width: 100%; }
+  .auth-card { padding: 1.5rem 1.25rem 1.75rem; border-radius: 18px; }
+  .auth-title { font-size: 1.5rem; }
+  .auth-subtitle { font-size: .78rem; }
+  .auth-tabs { margin-bottom: 1.25rem; }
+  .auth-tab { font-size: .85rem; padding: .6rem; }
+  .btn-google { font-size: .88rem; padding: .8rem 1.25rem; }
+  .btn-auth-submit { font-size: .95rem; padding: .9rem; }
+  .auth-input { padding: .75rem .9rem; }
+
+  /* Main section (logged in) */
+  #mainSection { max-width: 100%; }
+  .user-greeting-bar { padding: .65rem 1rem; }
+  #userGreeting { font-size: .82rem; }
+  .home-card { padding: 1.25rem; border-radius: 18px; }
+  .queue-mode-wrap { gap: .35rem; }
+  .queue-mode-btn { font-size: .8rem; padding: .55rem .5rem; }
+  .mono-input { font-size: 1.3rem; }
+  .btn-large { padding: .95rem; font-size: .95rem; }
+
+  /* Feature strip */
+  .home-page > div:last-child { gap: .9rem; }
+}
+
+@media (max-width: 479px) {
+  .home-page { padding: 1rem .85rem; }
+  .auth-card { padding: 1.25rem 1rem 1.5rem; }
+  .auth-title { font-size: 1.3rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESULTS PAGE — RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  #finishedSection { padding: 0; }
+  .res-hero { padding: 3rem 1.25rem 2.5rem; }
+  .res-headline { font-size: clamp(2rem, 9vw, 3.5rem); }
+  .res-trophy-anim { font-size: 3rem; }
+  .res-subline { font-size: .78rem; }
+  .res-winner-chip { padding: .5rem 1rem; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+  .rwc-name { font-size: .9rem; }
+  .rwc-score { font-size: 1rem; }
+  .res-hero-actions { gap: .5rem; }
+  .res-action-btn { padding: .7rem 1.25rem !important; font-size: .88rem !important; }
+
+  .res-section { padding: 1.5rem 1rem; }
+  .res-section-header { flex-wrap: wrap; gap: .5rem; }
+  .res-section-icon  { font-size: 1.1rem; }
+  .res-section-title { font-size: 1.2rem; }
+  .res-section-sub   { margin-left: 0; width: 100%; font-size: .72rem; }
+
+  /* Podium — single column */
+  .res-podium-row { grid-template-columns: 1fr; gap: 1rem; }
+  .res-podium-card { padding: 1.25rem 1rem; }
+  .rpc-score-ring { width: 70px; height: 70px; }
+  .rpc-ring-svg   { width: 70px; height: 70px; }
+  .rpc-ring-num   { font-size: 1.2rem; }
+  .rpc-avatar { width: 40px; height: 40px; }
+  .rpc-name { font-size: .88rem; }
+  .rpc-stats-row { gap: .35rem; }
+  .rps-val { font-size: .78rem; }
+  .rps-lbl { font-size: .55rem; }
+  .rpc-grade-pill { font-size: .68rem; }
+  .rpc-labels { gap: .25rem; }
+  .rpc-label { font-size: .6rem; }
+  .rpc-bars { gap: .25rem; }
+  .rpc-bar-lbl, .rpc-bar-val { font-size: .58rem; }
+
+  /* Others row */
+  .roc-name { font-size: .82rem; }
+  .roc-sub  { font-size: .68rem; }
+  .roc-score { font-size: 1rem; }
+
+  /* Captain grid — 2 columns */
+  .res-captain-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .rcc-grid { grid-template-columns: repeat(4, 1fr); }
+  .rccp-name { font-size: .58rem; }
+  .rccp-role { font-size: .5rem; }
+  .rccp-icon { width: 30px; height: 30px; font-size: .85rem; }
+
+  /* Squads — single column */
+  .res-squads-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .rsq-header { padding: .75rem 1rem; }
+  .rsq-role-block { padding: .5rem 1rem; }
+  .rsq-player { font-size: .75rem; }
+  .rsqp-name { font-size: .75rem; }
+  .rsqp-price { font-size: .68rem; }
+
+  /* Awards */
+  .res-awards-grid { grid-template-columns: 1fr 1fr; gap: .75rem; }
+  .rac-icon  { font-size: 1.5rem; }
+  .rac-title { font-size: .82rem; }
+  .rac-desc  { font-size: .75rem; }
+  .rac-sub   { font-size: .65rem; }
+
+  /* Unsold */
+  .res-unsold-chips { gap: .35rem; }
+  .res-unsold-chip { font-size: .72rem; padding: .25rem .6rem; }
+}
+
+@media (max-width: 479px) {
+  .rcc-grid { grid-template-columns: repeat(3, 1fr); }
+  .res-awards-grid { grid-template-columns: 1fr; }
+  .res-hero { padding: 2.5rem 1rem 2rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PROFILE PAGE — RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .profile-page { padding: 1.25rem 1rem; gap: 1rem; }
+  .profile-header { flex-direction: row; gap: 1rem; align-items: center; }
+  .profile-avatar { width: 52px; height: 52px; font-size: 1.3rem; }
+  .profile-name-display { font-size: 1.1rem; }
+  .profile-email-display { font-size: .75rem; }
+  .profile-actions { gap: .35rem; flex-wrap: wrap; }
+  .prc-stats { gap: .5rem; font-size: .75rem; }
+  .prc-code { font-size: .88rem; }
+  .past-room-card { padding: .75rem 1rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ANALYTICS MODAL — RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .am-card {
+    padding: 1.5rem 1.25rem;
+    max-height: 92vh;
+    border-radius: 18px;
+    margin: .5rem;
+  }
+  .am-name { font-size: 1.4rem; }
+  .am-header { gap: .75rem; }
+  .am-avatar { width: 56px; height: 56px; font-size: 1.3rem; }
+  .am-flag { font-size: 1.2rem; }
+  .am-chips { gap: .3rem; }
+  .rr-label { font-size: .65rem; width: 60px; }
+  .rr-track { height: 6px; }
+  .rr-val { font-size: .72rem; width: 22px; }
+  .am-price-row { gap: .5rem; }
+  .apb-val { font-size: .85rem; }
+  .am-stats-grid { grid-template-columns: 1fr 1fr; }
+  .stat-label, .stat-val { font-size: .72rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SOLD OVERLAY — MOBILE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 479px) {
+  .sold-card { padding: 1.75rem 1.25rem; border-radius: 18px; }
+  .sold-hammer { font-size: 3rem; }
+  .sold-word  { font-size: 2.5rem; }
+  .sold-pname { font-size: 1.2rem; }
+  .sold-price { font-size: 1.6rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   REPLAY MODAL — MOBILE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  .replay-card { padding: 1.5rem 1.25rem; max-width: calc(100vw - 1.5rem); border-radius: 18px; }
+  .replay-title { font-size: 1.2rem; }
+  .rf-icon { font-size: 2rem; }
+  .rf-headline { font-size: .95rem; }
+  .replay-controls { gap: .4rem; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   UTILITY OVERRIDES FOR MOBILE POLISH
+══════════════════════════════════════════════════════════════ */
+
+/* Better scrolling on iOS */
+.panel-left, .panel-center, .panel-right,
+.rcc-grid, .team-players-list, .res-squads-grid,
+#chatFeed, #historyTimeline, #leaderboardList {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Bigger tap area for clickable player rows */
+@media (max-width: 767px) {
+  .rsq-player, .team-player-row, .queue-item, .cc-player {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+  }
+}
+
+/* Fix timer circle on mobile */
+@media (max-width: 479px) {
+  #timerCircle { stroke-width: 7; }
+  .timer-track  { stroke-width: 7; }
+}
+
+/* Prevent horizontal scroll everywhere */
+.room-layout, .panel-left, .panel-center, .panel-right,
+#lobbySection, #finishedSection, .home-page {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Text size utilities for very small text on small screens */
+@media (max-width: 360px) {
+  :root {
+    --ff-size-base: 14px;
+  }
+  body { font-size: 14px; }
+  .auth-card { padding: 1rem .875rem 1.25rem; }
+  .home-logo { font-size: 2.2rem; }
+}
