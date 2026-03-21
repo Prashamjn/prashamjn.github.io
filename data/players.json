@@ -1,0 +1,152 @@
+[
+  {
+    "id":"p001","name":"Rohit Sharma","country":"India","basePrice":2,"role":"Batsman","isOverseas":false,"category":"Marquee","rating":95,
+    "battingRating":96,"bowlingRating":15,"fieldingRating":80,"experienceScore":98,
+    "stats":{"matches":243,"runs":6211,"strikeRate":130.6,"average":29.0,"economy":null,"wickets":null,"hundreds":1,"fifties":41}
+  },
+  {
+    "id":"p002","name":"Virat Kohli","country":"India","basePrice":2,"role":"Batsman","isOverseas":false,"category":"Marquee","rating":97,
+    "battingRating":98,"bowlingRating":10,"fieldingRating":88,"experienceScore":99,
+    "stats":{"matches":251,"runs":7624,"strikeRate":131.5,"average":37.3,"economy":null,"wickets":null,"hundreds":7,"fifties":52}
+  },
+  {
+    "id":"p003","name":"MS Dhoni","country":"India","basePrice":2,"role":"WK","isOverseas":false,"category":"Marquee","rating":96,
+    "battingRating":88,"bowlingRating":5,"fieldingRating":97,"experienceScore":100,
+    "stats":{"matches":264,"runs":5243,"strikeRate":135.9,"average":39.4,"economy":null,"wickets":null,"hundreds":0,"fifties":24}
+  },
+  {
+    "id":"p004","name":"Jasprit Bumrah","country":"India","basePrice":2,"role":"Bowler","isOverseas":false,"category":"Marquee","rating":96,
+    "battingRating":10,"bowlingRating":97,"fieldingRating":75,"experienceScore":90,
+    "stats":{"matches":136,"runs":56,"strikeRate":94.9,"average":null,"economy":7.4,"wickets":169,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p005","name":"Hardik Pandya","country":"India","basePrice":2,"role":"All-rounder","isOverseas":false,"category":"Marquee","rating":92,
+    "battingRating":82,"bowlingRating":78,"fieldingRating":85,"experienceScore":88,
+    "stats":{"matches":133,"runs":1851,"strikeRate":147.8,"average":30.0,"economy":9.1,"wickets":75,"hundreds":0,"fifties":8}
+  },
+  {
+    "id":"p006","name":"KL Rahul","country":"India","basePrice":2,"role":"WK","isOverseas":false,"category":"Marquee","rating":91,
+    "battingRating":90,"bowlingRating":0,"fieldingRating":86,"experienceScore":88,
+    "stats":{"matches":132,"runs":4683,"strikeRate":136.3,"average":45.0,"economy":null,"wickets":null,"hundreds":4,"fifties":41}
+  },
+  {
+    "id":"p007","name":"Rishabh Pant","country":"India","basePrice":2,"role":"WK","isOverseas":false,"category":"Marquee","rating":90,
+    "battingRating":87,"bowlingRating":0,"fieldingRating":84,"experienceScore":82,
+    "stats":{"matches":111,"runs":3284,"strikeRate":148.2,"average":35.2,"economy":null,"wickets":null,"hundreds":1,"fifties":18}
+  },
+  {
+    "id":"p008","name":"Shubman Gill","country":"India","basePrice":1,"role":"Batsman","isOverseas":false,"category":"Batsmen","rating":88,
+    "battingRating":87,"bowlingRating":5,"fieldingRating":80,"experienceScore":75,
+    "stats":{"matches":93,"runs":2930,"strikeRate":133.2,"average":37.5,"economy":null,"wickets":null,"hundreds":3,"fifties":20}
+  },
+  {
+    "id":"p009","name":"Yuzvendra Chahal","country":"India","basePrice":1,"role":"Bowler","isOverseas":false,"category":"Bowlers","rating":87,
+    "battingRating":8,"bowlingRating":88,"fieldingRating":65,"experienceScore":88,
+    "stats":{"matches":161,"runs":49,"strikeRate":69.0,"average":null,"economy":7.7,"wickets":205,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p010","name":"Ravindra Jadeja","country":"India","basePrice":2,"role":"All-rounder","isOverseas":false,"category":"Marquee","rating":93,
+    "battingRating":75,"bowlingRating":85,"fieldingRating":95,"experienceScore":92,
+    "stats":{"matches":236,"runs":2692,"strikeRate":127.9,"average":26.6,"economy":7.6,"wickets":157,"hundreds":0,"fifties":8}
+  },
+  {
+    "id":"p011","name":"Pat Cummins","country":"Australia","basePrice":2,"role":"All-rounder","isOverseas":true,"category":"Marquee","rating":94,
+    "battingRating":55,"bowlingRating":95,"fieldingRating":78,"experienceScore":88,
+    "stats":{"matches":55,"runs":275,"strikeRate":133.0,"average":null,"economy":8.5,"wickets":65,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p012","name":"Mitchell Starc","country":"Australia","basePrice":2,"role":"Bowler","isOverseas":true,"category":"Marquee","rating":93,
+    "battingRating":20,"bowlingRating":94,"fieldingRating":72,"experienceScore":90,
+    "stats":{"matches":63,"runs":63,"strikeRate":91.3,"average":null,"economy":7.9,"wickets":79,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p013","name":"David Warner","country":"Australia","basePrice":2,"role":"Batsman","isOverseas":true,"category":"Marquee","rating":92,
+    "battingRating":93,"bowlingRating":5,"fieldingRating":82,"experienceScore":95,
+    "stats":{"matches":184,"runs":6397,"strikeRate":140.0,"average":41.0,"economy":null,"wickets":null,"hundreds":4,"fifties":57}
+  },
+  {
+    "id":"p014","name":"Steve Smith","country":"Australia","basePrice":1,"role":"Batsman","isOverseas":true,"category":"Batsmen","rating":91,
+    "battingRating":90,"bowlingRating":18,"fieldingRating":80,"experienceScore":92,
+    "stats":{"matches":136,"runs":3163,"strikeRate":125.7,"average":31.0,"economy":10.2,"wickets":14,"hundreds":0,"fifties":22}
+  },
+  {
+    "id":"p015","name":"Glenn Maxwell","country":"Australia","basePrice":2,"role":"All-rounder","isOverseas":true,"category":"All-rounders","rating":90,
+    "battingRating":85,"bowlingRating":72,"fieldingRating":88,"experienceScore":90,
+    "stats":{"matches":132,"runs":3228,"strikeRate":155.6,"average":24.8,"economy":8.7,"wickets":47,"hundreds":3,"fifties":13}
+  },
+  {
+    "id":"p016","name":"Jos Buttler","country":"England","basePrice":2,"role":"WK","isOverseas":true,"category":"Marquee","rating":93,
+    "battingRating":93,"bowlingRating":0,"fieldingRating":90,"experienceScore":90,
+    "stats":{"matches":99,"runs":3582,"strikeRate":149.0,"average":38.8,"economy":null,"wickets":null,"hundreds":7,"fifties":22}
+  },
+  {
+    "id":"p017","name":"Ben Stokes","country":"England","basePrice":2,"role":"All-rounder","isOverseas":true,"category":"Marquee","rating":92,
+    "battingRating":80,"bowlingRating":80,"fieldingRating":90,"experienceScore":90,
+    "stats":{"matches":61,"runs":920,"strikeRate":130.5,"average":23.5,"economy":9.3,"wickets":30,"hundreds":0,"fifties":5}
+  },
+  {
+    "id":"p018","name":"Sam Curran","country":"England","basePrice":1,"role":"All-rounder","isOverseas":true,"category":"All-rounders","rating":85,
+    "battingRating":68,"bowlingRating":76,"fieldingRating":78,"experienceScore":72,
+    "stats":{"matches":73,"runs":734,"strikeRate":136.0,"average":21.0,"economy":8.9,"wickets":69,"hundreds":0,"fifties":2}
+  },
+  {
+    "id":"p019","name":"Mark Wood","country":"England","basePrice":1,"role":"Bowler","isOverseas":true,"category":"Bowlers","rating":84,
+    "battingRating":15,"bowlingRating":84,"fieldingRating":70,"experienceScore":72,
+    "stats":{"matches":25,"runs":32,"strikeRate":88.9,"average":null,"economy":9.1,"wickets":28,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p020","name":"Liam Livingstone","country":"England","basePrice":1,"role":"All-rounder","isOverseas":true,"category":"All-rounders","rating":86,
+    "battingRating":82,"bowlingRating":65,"fieldingRating":80,"experienceScore":75,
+    "stats":{"matches":71,"runs":1541,"strikeRate":158.4,"average":26.6,"economy":9.5,"wickets":41,"hundreds":2,"fifties":7}
+  },
+  {
+    "id":"p021","name":"Suryakumar Yadav","country":"India","basePrice":2,"role":"Batsman","isOverseas":false,"category":"Marquee","rating":94,
+    "battingRating":95,"bowlingRating":5,"fieldingRating":85,"experienceScore":85,
+    "stats":{"matches":150,"runs":4009,"strikeRate":165.0,"average":32.0,"economy":null,"wickets":null,"hundreds":4,"fifties":23}
+  },
+  {
+    "id":"p022","name":"Ishan Kishan","country":"India","basePrice":1,"role":"WK","isOverseas":false,"category":"Wicketkeepers","rating":86,
+    "battingRating":82,"bowlingRating":0,"fieldingRating":82,"experienceScore":70,
+    "stats":{"matches":105,"runs":2644,"strikeRate":136.7,"average":28.2,"economy":null,"wickets":null,"hundreds":2,"fifties":16}
+  },
+  {
+    "id":"p023","name":"Shreyas Iyer","country":"India","basePrice":1,"role":"Batsman","isOverseas":false,"category":"Batsmen","rating":88,
+    "battingRating":86,"bowlingRating":8,"fieldingRating":78,"experienceScore":82,
+    "stats":{"matches":115,"runs":3143,"strikeRate":130.0,"average":31.0,"economy":null,"wickets":null,"hundreds":1,"fifties":20}
+  },
+  {
+    "id":"p024","name":"Axar Patel","country":"India","basePrice":1,"role":"All-rounder","isOverseas":false,"category":"All-rounders","rating":85,
+    "battingRating":66,"bowlingRating":82,"fieldingRating":80,"experienceScore":82,
+    "stats":{"matches":118,"runs":952,"strikeRate":136.6,"average":24.4,"economy":7.5,"wickets":99,"hundreds":0,"fifties":1}
+  },
+  {
+    "id":"p025","name":"Mohammed Shami","country":"India","basePrice":2,"role":"Bowler","isOverseas":false,"category":"Bowlers","rating":91,
+    "battingRating":10,"bowlingRating":91,"fieldingRating":68,"experienceScore":88,
+    "stats":{"matches":101,"runs":47,"strikeRate":60.3,"average":null,"economy":8.2,"wickets":120,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p026","name":"Faf du Plessis","country":"South Africa","basePrice":1,"role":"Batsman","isOverseas":true,"category":"Batsmen","rating":89,
+    "battingRating":88,"bowlingRating":5,"fieldingRating":90,"experienceScore":92,
+    "stats":{"matches":130,"runs":4348,"strikeRate":133.5,"average":36.1,"economy":null,"wickets":null,"hundreds":4,"fifties":36}
+  },
+  {
+    "id":"p027","name":"Quinton de Kock","country":"South Africa","basePrice":1,"role":"WK","isOverseas":true,"category":"Wicketkeepers","rating":88,
+    "battingRating":87,"bowlingRating":0,"fieldingRating":88,"experienceScore":88,
+    "stats":{"matches":107,"runs":3286,"strikeRate":137.0,"average":33.2,"economy":null,"wickets":null,"hundreds":4,"fifties":22}
+  },
+  {
+    "id":"p028","name":"Kagiso Rabada","country":"South Africa","basePrice":1,"role":"Bowler","isOverseas":true,"category":"Bowlers","rating":90,
+    "battingRating":22,"bowlingRating":91,"fieldingRating":75,"experienceScore":85,
+    "stats":{"matches":90,"runs":177,"strikeRate":107.9,"average":null,"economy":8.3,"wickets":112,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p029","name":"Rashid Khan","country":"Afghanistan","basePrice":2,"role":"Bowler","isOverseas":true,"category":"Marquee","rating":95,
+    "battingRating":35,"bowlingRating":97,"fieldingRating":80,"experienceScore":88,
+    "stats":{"matches":122,"runs":555,"strikeRate":132.9,"average":null,"economy":6.6,"wickets":165,"hundreds":0,"fifties":0}
+  },
+  {
+    "id":"p030","name":"Nicholas Pooran","country":"West Indies","basePrice":1,"role":"WK","isOverseas":true,"category":"Wicketkeepers","rating":87,
+    "battingRating":84,"bowlingRating":0,"fieldingRating":82,"experienceScore":80,
+    "stats":{"matches":88,"runs":2140,"strikeRate":158.8,"average":28.5,"economy":null,"wickets":null,"hundreds":1,"fifties":13}
+  }
+]

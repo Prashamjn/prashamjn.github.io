@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>IPL Auction Room</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔨</text></svg>"/>
+</head>
+<body data-page="room">
+<div class="page-wrapper">
+
+  <!-- ══════ STICKY NAV ══════ -->
+  <nav class="room-nav">
+    <div class="nav-brand">🏏 IPL Auction</div>
+    <span id="navUserName" style="font-size:.75rem;color:var(--text2);font-family:var(--fm);"></span>
+
+    <div class="room-code-chip">
+      <span class="rcc-label">Room</span>
+      <span class="rcc-val" id="roomCodeDisplay">------</span>
+      <button class="btn-icon" id="copyCodeBtn" title="Copy">📋</button>
+    </div>
+
+    <div id="myBudgetDisplay">
+      <span class="budget-ico">💰</span>
+      <span class="budget-val">₹100 Cr</span>
+      <div class="budget-mini-bar"><div class="budget-mini-fill" style="width:100%;background:var(--green)"></div></div>
+    </div>
+
+    <div class="nav-right">
+      <div id="themeSwitcher"></div>
+      <button class="btn-icon" id="soundToggleBtn" title="Sound">🔊</button>
+      <button class="btn-icon" id="leaveRoomBtn" title="Leave">🚪</button>
+    </div>
+  </nav>
+
+  <!-- ══════ LOBBY ══════ -->
+  <div id="lobbySection" style="display:none" class="room-fullwidth">
+    <div class="g-card">
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+        <span style="font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);font-weight:700;">Players in Lobby</span>
+        <span id="memberCount" style="background:var(--green);color:#000;font-size:.65rem;font-weight:800;padding:.15rem .5rem;border-radius:100px;">0</span>
+      </div>
+      <div class="members-grid" id="membersGrid"></div>
+    </div>
+    <div class="g-card" style="text-align:center;padding:2rem;">
+      <div id="hostControls"></div>
+    </div>
+    <div class="g-card">
+      <div class="card-section-title">📋 IPL Auction Rules (Phase 3)</div>
+      <div style="color:var(--text2);font-size:.875rem;line-height:1.9;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.25rem 2rem;">
+        <div>• Budget: <strong style="color:var(--green)">₹100 Cr</strong> per team</div>
+        <div>• Bid increment: <strong style="color:var(--gold)">₹1 Cr</strong></div>
+        <div>• Timer: <strong style="color:var(--red)">10s</strong> (resets on each bid)</div>
+        <div>• Last 3s bid → <strong style="color:var(--orange)">5s boost</strong></div>
+        <div>• Max squad: <strong>25 players</strong></div>
+        <div>• Max overseas: <strong>8 players</strong></div>
+        <div>• Click any player for stats & analytics</div>
+        <div>• AI team rating calculated at end</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ AUCTION (4-panel) ══════ -->
+  <div id="auctionSection" style="display:none">
+    <div class="room-layout">
+
+      <!-- LEFT: Chat + Queue -->
+      <div class="panel-left">
+
+        <div class="g-card g-card-sm">
+          <div id="queuePreview">
+            <div class="queue-preview-label">Up Next</div>
+            <div style="color:var(--text3);font-size:.8rem;font-style:italic;">Loading…</div>
+          </div>
+        </div>
+
+        <!-- Smart Suggestion -->
+        <div id="smartSuggestion" class="g-card g-card-sm" style="display:none;"></div>
+
+        <!-- Chat -->
+        <div class="g-card" style="flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;">
+          <div class="panel-title">💬 Live Chat</div>
+          <div class="chat-panel" style="flex:1;min-height:0;">
+            <div id="chatFeed" style="flex:1;min-height:120px;max-height:260px;overflow-y:auto;">
+              <div style="color:var(--text3);font-size:.8rem;font-style:italic;">Chat is live…</div>
+            </div>
+            <div id="emojiRow"></div>
+            <div class="chat-input-row">
+              <input type="text" id="chatInput" placeholder="Type a message… (Enter)" maxlength="120" autocomplete="off"/>
+              <button id="chatSendBtn">➤</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CENTER: Auction Stage -->
+      <div class="panel-center">
+
+        <div id="pausedBanner" class="g-card" style="display:none;border-color:rgba(245,158,11,.3);">
+          <span>⏸️</span><span style="font-weight:700;color:var(--gold);">Auction paused by host</span>
+        </div>
+
+        <div id="hostControlPanel"></div>
+
+        <div class="g-card" id="currentPlayerCard" style="min-height:300px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+          <div style="color:var(--text3);">Waiting for auction…</div>
+        </div>
+
+        <!-- Timer -->
+        <div class="g-card g-card-sm">
+          <div class="timer-wrap">
+            <div class="timer-svg-wrap">
+              <svg class="timer-svg" viewBox="0 0 100 100">
+                <circle class="timer-track" cx="50" cy="50" r="45"/>
+                <circle id="timerCircle" cx="50" cy="50" r="45" stroke-dasharray="282.74" stroke-dashoffset="0"/>
+              </svg>
+              <div class="timer-inner">
+                <span class="timer-number" id="auctionTimer">15</span>
+                <span class="timer-sub-label">sec</span>
+              </div>
+            </div>
+            <div class="timer-info-col">
+              <div class="timer-info-title">⏱️ Time Remaining</div>
+              <div id="timerLabel" style="font-size:.72rem;color:var(--text3);">Timer resets on each bid</div>
+              <div style="font-size:.65rem;color:var(--text3);">Last-3s bid → 5s boost ⚡</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bid Area -->
+        <div class="g-card bid-section">
+          <div class="current-bid-block">
+            <div class="cbb-label">Current Bid</div>
+            <div id="currentBidDisplay" data-value="0">₹0 Cr</div>
+          </div>
+          <div class="bidder-display" id="highestBidder">
+            <span class="bidder-label">No bids yet — be first!</span>
+          </div>
+          <div id="bidLockNotice" class="bid-lock-notice" style="display:none">
+            <span class="bln-icon">🏆</span>
+            <span>You are the highest bidder! Wait for someone else to bid before raising.</span>
+          </div>
+          <button class="btn btn-bid" id="placeBidBtn" onclick="handlePlaceBid()">⚡ Place Bid</button>
+          <div style="text-align:center;margin-top:.25rem;">
+            <button id="skipPlayerBtn" style="display:none;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:var(--red);padding:.5rem 1.1rem;border-radius:var(--r8);font-family:var(--ff);font-size:.82rem;font-weight:700;cursor:pointer;" onclick="skipCurrentPlayer(AppState.lastRoomSnapshot)">⏭️ Skip (Unsold)</button>
+          </div>
+        </div>
+
+        <!-- Squad Status -->
+        <div class="g-card g-card-sm">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--text3);font-weight:700;margin-bottom:.6rem;">My Squad (IPL Rules)</div>
+          <div id="squadStatus">
+            <div class="squad-grid">
+              <div class="sq-item"><span class="sq-val">0/25</span><span class="sq-label">Squad</span></div>
+              <div class="sq-item"><span class="sq-val">0/8</span><span class="sq-label">OS</span></div>
+              <div class="sq-item"><span class="sq-val">₹100</span><span class="sq-label">Budget</span></div>
+              <div class="sq-item"><span class="sq-val">0/0/0/0</span><span class="sq-label">B/Bw/AR/WK</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT: Leaderboard + History + Teams -->
+      <div class="panel-right">
+
+        <div class="g-card g-card-sm" style="flex-shrink:0;">
+          <div class="panel-title">📊 Leaderboard</div>
+          <div id="leaderboardList" style="margin-top:.5rem;"></div>
+        </div>
+
+        <!-- History Timeline -->
+        <div class="g-card g-card-sm" style="flex-shrink:0;">
+          <div class="panel-title">📜 Bid History</div>
+          <div id="historyTimeline" style="max-height:200px;overflow-y:auto;margin-top:.5rem;">
+            <div class="hist-empty">No bids yet</div>
+          </div>
+        </div>
+
+        <!-- All Teams -->
+        <div class="g-card g-card-sm" style="flex:1;overflow-y:auto;">
+          <div class="panel-title" style="margin-bottom:.75rem;">🏆 All Teams</div>
+          <div id="teamsContainer"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ FINISHED ══════ -->
+  <div id="finishedSection" style="display:none;">
+    <div id="finalResultsContainer"></div>
+  </div>
+
+</div><!-- /page-wrapper -->
+
+<!-- Overlays -->
+<div id="soldOverlay"></div>
+<div id="bidFlash"></div>
+
+<!-- Analytics Modal -->
+<div id="analyticsModal"></div>
+
+<!-- Replay Modal -->
+<div id="replayModal">
+  <div class="am-backdrop" onclick="closeReplayModal()"></div>
+  <div class="replay-card">
+    <button class="replay-close-btn" onclick="closeReplayModal()">✕ Close</button>
+    <div class="replay-title">🎬 Auction Replay</div>
+    <div class="replay-progress-wrap">
+      <div id="replayProgress" style="width:0"></div>
+    </div>
+    <div id="replayContent">
+      <div class="replay-frame" style="color:var(--text3);">Loading…</div>
+    </div>
+    <div class="replay-controls">
+      <button class="btn btn-secondary hcp-btn" id="replayPrevBtn" onclick="replayPrev()" disabled>◀ Prev</button>
+      <button class="btn btn-primary hcp-btn" id="replayPlayBtn" onclick="toggleAutoReplay()">▶️ Play</button>
+      <button class="btn btn-secondary hcp-btn" id="replayNextBtn" onclick="replayNext()">Next ▶</button>
+    </div>
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- App (load order matters) -->
+<script src="js/firebase.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/rules.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/rating.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/history.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/auction.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Trigger bar animations when analytics modal opens
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".rr-fill[data-width]").forEach(el => {
+      el.style.width = el.dataset.width + "%";
+    });
+  }, { passive: true });
+</script>
+</body>
+</html>

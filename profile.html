@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>My Profile — IPL Auction</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👤</text></svg>"/>
+</head>
+<body data-page="profile">
+<div class="page-wrapper">
+
+  <!-- Theme -->
+  <div style="position:fixed;top:1rem;right:1rem;z-index:200;" id="themeSwitcher"></div>
+
+  <div class="profile-page">
+
+    <!-- Back + title -->
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button id="backHomeBtn" class="btn-icon">← Back</button>
+      <div style="font-family:var(--fb);font-size:1.6rem;letter-spacing:.04em;background:var(--grad-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+        My Profile
+      </div>
+    </div>
+
+    <!-- Profile header -->
+    <div class="profile-header g-card">
+      <div class="profile-avatar" id="profileAvatarCircle">?</div>
+      <div class="profile-info">
+        <div class="profile-name-display" id="profileName">Loading…</div>
+        <div class="profile-email-display" id="profileEmail"></div>
+        <div class="profile-actions">
+          <button id="profileSignOutBtn" class="btn btn-danger" style="padding:.5rem 1rem;font-size:.85rem;">🚪 Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auction history -->
+    <div class="g-card">
+      <div class="section-heading">🏏 Auction History</div>
+      <div id="pastRoomsList">
+        <div class="loading-rooms">
+          <div class="spinner"></div> Loading your history…
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules reminder -->
+    <div class="g-card" style="opacity:.7">
+      <div class="section-heading">📋 How it works</div>
+      <p style="font-size:.85rem;color:var(--text2);line-height:1.8;">
+        Your auction history is automatically saved after each completed auction.
+        Come back anytime to see which players you bought and how much you spent.<br/><br/>
+        <strong>New in this version:</strong> ⭐ Star players (Virat, Rohit, Dhoni…) now appear first in every auction.
+        Bids are also now locked — you can't bid twice in a row, you must wait for someone else to bid!
+      </p>
+    </div>
+
+  </div>
+</div>
+
+<div id="toastContainer"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script src="js/firebase.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/rules.js"></script>
+<script src="js/timer.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/rating.js"></script>
+<script src="js/analytics.js"></script>
+<script src="js/history.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/auction.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+  // Set avatar initials once profile loads
+  document.addEventListener("DOMContentLoaded", () => {
+    const unsubAuth = onAuthChange(user => {
+      if (user) {
+        const avatarEl = document.getElementById("profileAvatarCircle");
+        if (avatarEl) {
+          const name = user.displayName || user.email;
+          avatarEl.textContent = name.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase();
+        }
+      }
+    });
+  });
+</script>
+</body>
+</html>
