@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#080c08"/>
+  <link rel="manifest" href="manifest.json"/>
+  <title>DropBeam · Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/dropbeam.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="scanlines"></div>
+<div class="grid-bg"></div>
+
+<!-- TOP BAR -->
+<header class="room-header">
+  <a href="dropbeam.html" class="nav-brand nav-brand-sm">
+    <span class="brand-bracket">[</span>
+    <span class="brand-logo">DROP<span class="brand-accent">BEAM</span></span>
+    <span class="brand-bracket">]</span>
+  </a>
+
+  <div class="room-id-zone">
+    <span class="rid-label">ROOM://</span>
+    <span class="rid-val" id="headerRoomId">------</span>
+    <button class="icon-btn" id="copyRidBtn" title="Copy room ID">⎘</button>
+    <div class="conn-indicator" id="connIndicator">
+      <span class="ci-dot" id="ciDot"></span>
+      <span class="ci-text" id="ciText">CONNECTING</span>
+    </div>
+  </div>
+
+  <div class="room-header-right">
+    <span class="enc-badge" id="encBadge">🔐 ENC:OFF</span>
+    <button class="nav-btn theme-btn" id="themeToggle"><span id="themeIcon">◐</span></button>
+    <button class="danger-btn" id="leaveBtn">DISCONNECT</button>
+  </div>
+</header>
+
+<!-- ROOM LAYOUT -->
+<div class="room-shell">
+
+  <!-- LEFT: Users + Room Info + Clipboard -->
+  <aside class="left-rail">
+
+    <!-- Users -->
+    <div class="rail-block">
+      <div class="block-hdr">
+        <span class="block-title">// PEERS</span>
+        <span class="peer-badge" id="peerBadge">01</span>
+        <button class="icon-btn mobile-close-rail" id="closePeersPanel" title="Close">✕</button>
+      </div>
+      <div id="usersList" class="users-list"></div>
+    </div>
+
+    <!-- Room Info -->
+    <div class="rail-block">
+      <div class="block-hdr"><span class="block-title">// ROOM_INFO</span></div>
+      <div class="info-table">
+        <div class="it-row"><span class="it-k">ROLE</span><span class="it-v" id="myRoleVal">—</span></div>
+        <div class="it-row"><span class="it-k">PEERS</span><span class="it-v" id="peerCountVal">0</span></div>
+        <div class="it-row"><span class="it-k">ENC</span><span class="it-v green-val">AES-256-GCM</span></div>
+        <div class="it-row"><span class="it-k">EXPIRY</span><span class="it-v" id="expiryVal">SESSION</span></div>
+      </div>
+      <div class="share-btns">
+        <button class="sm-btn" id="copyLinkBtn">COPY_LINK</button>
+        <button class="sm-btn" id="showQrBtn">QR_CODE</button>
+      </div>
+      <div id="qrBox" class="qr-box hidden">
+        <div id="roomQrCode"></div>
+      </div>
+    </div>
+
+    <!-- Clipboard Share -->
+    <div class="rail-block">
+      <div class="block-hdr"><span class="block-title">// QUICK_PASTE</span></div>
+      <textarea class="clip-area" id="clipArea" placeholder="// paste text, links, notes...&#10;// will be shared with all peers"></textarea>
+      <button class="sm-btn sm-btn-full" id="sendClipBtn">BROADCAST →</button>
+    </div>
+
+  </aside>
+
+  <!-- CENTER: Tabs (Transfer / History / Activity) -->
+  <main class="center-pane">
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <button class="tab active" data-tab="transfer">TRANSFER</button>
+      <button class="tab" data-tab="history">HISTORY</button>
+      <button class="tab" data-tab="activity">ACTIVITY</button>
+    </div>
+
+    <!-- TRANSFER TAB -->
+    <div class="tab-pane active" id="pane-transfer">
+
+      <!-- Waiting state -->
+      <div id="waitState" class="wait-state">
+        <div class="wait-animation">
+          <div class="wait-ring wr1"></div>
+          <div class="wait-ring wr2"></div>
+          <div class="wait-ring wr3"></div>
+          <span class="wait-core">◈</span>
+        </div>
+        <p class="wait-title">AWAITING PEERS</p>
+        <p class="wait-sub">ROOM: <strong id="waitRoomCode">------</strong></p>
+        <div class="wait-actions">
+          <button class="sm-btn" id="waitCopyCode">COPY CODE</button>
+          <button class="sm-btn" id="waitCopyLink">COPY LINK</button>
+        </div>
+      </div>
+
+      <!-- Connected state -->
+      <div id="connState" class="conn-state hidden">
+
+        <!-- Drop zone -->
+        <div id="dropZone" class="drop-zone">
+          <input type="file" id="fileInput" multiple hidden/>
+          <div class="dz-inner" id="dzInner">
+            <div class="dz-icon">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M24 32V12M24 12L16 20M24 12L32 20"/>
+                <path d="M8 38h32"/>
+              </svg>
+            </div>
+            <p class="dz-title">DROP FILES TO BEAM</p>
+            <p class="dz-sub">or <span id="browseTrigger" class="link-text">browse</span> · max 500MB · any type</p>
+          </div>
+          <div class="dz-overlay" id="dzOverlay">
+            <span class="dzo-icon">⚡</span>
+            <span class="dzo-text">RELEASE TO SEND</span>
+          </div>
+        </div>
+
+        <!-- Peer target -->
+        <div id="peerTarget" class="peer-target hidden">
+          <span class="pt-label">TARGET →</span>
+          <div id="peerTargetList" class="pt-list"></div>
+        </div>
+
+        <!-- Active transfers -->
+        <div id="activeTransfers" class="transfers-container"></div>
+
+      </div>
+    </div>
+
+    <!-- HISTORY TAB -->
+    <div class="tab-pane hidden" id="pane-history">
+      <div class="hist-header">
+        <div class="hist-filters">
+          <button class="filt active" data-f="all">ALL</button>
+          <button class="filt" data-f="sent">SENT</button>
+          <button class="filt" data-f="received">RECEIVED</button>
+        </div>
+        <button class="ghost-btn" id="clearHistBtn">CLEAR</button>
+      </div>
+      <div id="histList" class="hist-list">
+        <div class="empty-msg"><span>// NO_HISTORY_FOUND</span></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY TAB -->
+    <div class="tab-pane hidden" id="pane-activity">
+      <div id="actFeed" class="act-feed">
+        <div class="empty-msg"><span>// AWAITING_EVENTS</span></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- RIGHT: Chat -->
+  <aside class="right-rail chat-rail">
+    <div class="block-hdr">
+      <span class="block-title">// LIVE_CHAT</span>
+      <span class="msg-count-badge" id="msgCountBadge">0</span>
+      <button class="icon-btn mobile-close-rail" id="closeChatPanel" title="Close">✕</button>
+    </div>
+    <div id="chatMessages" class="chat-msgs">
+      <div class="chat-empty">
+        <span>// CHANNEL_OPEN</span>
+        <span class="chat-empty-sub">messages appear here</span>
+      </div>
+    </div>
+    <div class="chat-foot">
+      <div class="chat-input-wrap">
+        <input type="text" class="chat-input" id="chatInput" placeholder="// type message..." maxlength="500"/>
+        <button class="emoji-toggle" id="emojiToggle">:)</button>
+      </div>
+      <button class="send-btn" id="chatSendBtn">SEND</button>
+    </div>
+    <div id="emojiPicker" class="emoji-picker hidden"></div>
+  </aside>
+
+</div>
+
+<!-- MODALS -->
+
+<!-- Incoming file -->
+<div class="modal-veil hidden" id="incomingModal">
+  <div class="modal-box modal-incoming">
+    <div class="modal-hdr">
+      <span>// INCOMING_FILE</span>
+    </div>
+    <div class="incoming-icon" id="incomingIcon">📁</div>
+    <p class="incoming-from">FROM: <strong id="incomingFrom">PEER</strong></p>
+    <div class="file-meta-table">
+      <div class="fmt-row"><span class="fmt-k">NAME</span><span class="fmt-v" id="incomingName">—</span></div>
+      <div class="fmt-row"><span class="fmt-k">SIZE</span><span class="fmt-v" id="incomingSize">—</span></div>
+      <div class="fmt-row"><span class="fmt-k">TYPE</span><span class="fmt-v" id="incomingType">—</span></div>
+    </div>
+    <div class="modal-actions">
+      <button class="cta-btn cta-green" id="acceptBtn">✓ ACCEPT</button>
+      <button class="cta-btn cta-red" id="rejectBtn">✕ REJECT</button>
+    </div>
+  </div>
+</div>
+
+<!-- Preview modal -->
+<div class="modal-veil hidden" id="previewModal">
+  <div class="modal-box modal-preview">
+    <div class="modal-hdr">
+      <span id="previewFilename">PREVIEW</span>
+      <div style="display:flex;gap:8px">
+        <button class="sm-btn" id="previewDlBtn">↓ DOWNLOAD</button>
+        <button class="icon-btn" id="closePreviewBtn">✕</button>
+      </div>
+    </div>
+    <div id="previewBody" class="preview-body"></div>
+  </div>
+</div>
+
+<!-- Toast stack -->
+<div class="toast-stack" id="toastStack"></div>
+
+<!-- Mobile overlay (backdrop when sidebar open) -->
+<div id="mobileOverlay" class="mobile-overlay hidden"></div>
+
+<!-- Mobile bottom nav bar -->
+<nav class="mobile-bottom-nav">
+  <button class="mbn-btn" id="mobilePeersBtn">
+    <svg viewBox="0 0 20 20" fill="currentColor" width="18"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/></svg>
+    <span>PEERS</span>
+    <span class="mbn-count" id="mobilePeerCount">1</span>
+  </button>
+  <button class="mbn-btn mbn-center" id="mobileTransferBtn" data-tab-target="transfer">
+    <svg viewBox="0 0 20 20" fill="currentColor" width="20"><path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/></svg>
+    <span>FILES</span>
+  </button>
+  <button class="mbn-btn" id="mobileChatBtn">
+    <svg viewBox="0 0 20 20" fill="currentColor" width="18"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/></svg>
+    <span>CHAT</span>
+    <span class="mbn-count mbn-count-chat" id="mobileUnread" hidden>0</span>
+  </button>
+</nav>
+
+<!-- Mobile conn status bar (shown below header on mobile) -->
+<div class="mobile-conn-bar" id="mobileConnBar">
+  <span class="ci-dot" id="mobileConnDot"></span>
+  <span id="mobileConnText">CONNECTING</span>
+</div>
+
+<script type="module" src="js/room.js"></script>
+</body>
+</html>
