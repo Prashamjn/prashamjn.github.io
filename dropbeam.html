@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#080c08"/>
+  <meta name="description" content="DropBeam — P2P encrypted file transfer. No servers. No limits."/>
+  <link rel="manifest" href="manifest.json"/>
+  <title>DropBeam - The File Sharing App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/dropbeam.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="scanlines"></div>
+<div class="grid-bg"></div>
+
+<nav class="topnav">
+  <div class="nav-brand">
+    <span class="brand-bracket">[</span>
+    <span class="brand-logo">DROP<span class="brand-accent">BEAM</span></span>
+    <span class="brand-bracket">]</span>
+    <span class="brand-tag">v3.0 // P2P</span>
+  </div>
+  <div class="nav-right">
+    <span class="sys-clock" id="sysClock">00:00:00</span>
+    <button class="nav-btn theme-btn" id="themeToggle" title="Toggle theme">
+      <span id="themeIcon">◐</span>
+    </button>
+    <button class="nav-btn install-btn" id="installBtn" hidden>
+      ↓ INSTALL
+    </button>
+  </div>
+</nav>
+
+<main class="home-main">
+
+  <!-- Hero section -->
+  <section class="hero-section">
+    <div class="hero-label">// INITIALIZING SECURE CHANNEL</div>
+    <h1 class="hero-title">
+      <span class="ht-line1">BEAM FILES.</span>
+      <span class="ht-line2">NO <span class="accent-green">SERVERS.</span></span>
+      <span class="ht-line3">NO TRACES.</span>
+    </h1>
+    <p class="hero-desc">
+      WebRTC peer-to-peer transfer with AES-256-GCM encryption.<br/>
+      Files never leave your device — zero cloud storage.
+    </p>
+    <div class="hero-tags">
+      <span class="tag">⚡ WebRTC</span>
+      <span class="tag">🔐 E2E Encrypted</span>
+      <span class="tag">📦 Up to 500MB</span>
+      <span class="tag">👥 Multi-peer</span>
+    </div>
+  </section>
+
+  <!-- Action panels -->
+  <div class="action-grid">
+
+    <!-- CREATE ROOM -->
+    <div class="panel panel-create">
+      <div class="panel-header">
+        <span class="panel-num">01</span>
+        <span class="panel-title">CREATE ROOM</span>
+        <span class="panel-status status-ready">READY</span>
+      </div>
+      <div class="panel-body">
+        <p class="panel-desc">Generate a secure room. Share the code with peers.</p>
+
+        <div class="option-block">
+          <div class="option-row">
+            <span class="opt-key">PASSWORD_PROTECT</span>
+            <label class="toggle">
+              <input type="checkbox" id="usePassword"/>
+              <span class="toggle-bar"><span class="toggle-dot"></span></span>
+            </label>
+          </div>
+          <div id="passwordGroup" class="input-group hidden">
+            <label class="input-label">SET_PASSWORD</label>
+            <input type="password" class="mono-input" id="roomPassword" placeholder="enter password..." maxlength="32"/>
+          </div>
+          <div class="option-row">
+            <span class="opt-key">EXPIRY</span>
+            <select class="mono-select" id="roomExpiry">
+              <option value="0">NEVER</option>
+              <option value="30">30_MIN</option>
+              <option value="60" selected>1_HOUR</option>
+              <option value="240">4_HOURS</option>
+              <option value="1440">24_HOURS</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="cta-btn cta-green" id="createRoomBtn">
+          <span class="cta-icon">+</span>
+          <span>INITIALIZE ROOM</span>
+          <span class="cta-arrow">→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- JOIN ROOM -->
+    <div class="panel panel-join">
+      <div class="panel-header">
+        <span class="panel-num">02</span>
+        <span class="panel-title">JOIN ROOM</span>
+        <span class="panel-status status-idle">IDLE</span>
+      </div>
+      <div class="panel-body">
+        <p class="panel-desc">Enter a room code to establish a P2P connection.</p>
+
+        <div class="input-group">
+          <label class="input-label">ROOM_ID</label>
+          <input type="text" class="mono-input code-input" id="roomCodeInput"
+            placeholder="XXX-XXX" maxlength="10"
+            autocomplete="off" autocapitalize="characters" spellcheck="false"/>
+        </div>
+        <div id="joinPassGroup" class="input-group hidden">
+          <label class="input-label">PASSWORD</label>
+          <input type="password" class="mono-input" id="joinPassword" placeholder="room password..."/>
+        </div>
+
+        <p class="input-error hidden" id="joinError">// ERROR: Invalid room code or room not found</p>
+
+        <div class="btn-row">
+          <button class="cta-btn cta-green" id="joinRoomBtn" style="flex:1">
+            <span class="cta-icon">→</span>
+            <span>CONNECT</span>
+          </button>
+          <button class="cta-btn cta-ghost" id="scanQrBtn" title="Scan QR code">
+            <span>QR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent rooms -->
+  <section id="recentSection" class="recent-section hidden">
+    <div class="section-hdr">
+      <span class="section-label">// RECENT_ROOMS</span>
+      <button class="ghost-btn" id="clearRecentBtn">CLEAR ALL</button>
+    </div>
+    <div id="recentList" class="recent-list"></div>
+  </section>
+
+  <!-- Stats bar -->
+  <div id="statsBar" class="stats-bar hidden">
+    <div class="stat-cell">
+      <span class="stat-val" id="statSent">0</span>
+      <span class="stat-key">FILES_SENT</span>
+    </div>
+    <div class="stat-divider">|</div>
+    <div class="stat-cell">
+      <span class="stat-val" id="statRecvd">0</span>
+      <span class="stat-key">FILES_RECEIVED</span>
+    </div>
+    <div class="stat-divider">|</div>
+    <div class="stat-cell">
+      <span class="stat-val" id="statBytes">0 MB</span>
+      <span class="stat-key">TOTAL_TRANSFERRED</span>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="features-row">
+    <div class="feat"><span class="feat-ico">🔐</span><span>AES-256-GCM</span></div>
+    <div class="feat"><span class="feat-ico">⚡</span><span>RESUMABLE</span></div>
+    <div class="feat"><span class="feat-ico">💬</span><span>LIVE CHAT</span></div>
+    <div class="feat"><span class="feat-ico">📱</span><span>PWA READY</span></div>
+    <div class="feat"><span class="feat-ico">👥</span><span>MULTI-PEER</span></div>
+    <div class="feat"><span class="feat-ico">🔍</span><span>PREVIEW</span></div>
+  </div>
+
+</main>
+
+<!-- Loading overlay -->
+<div class="sys-overlay hidden" id="sysOverlay">
+  <div class="sys-box">
+    <div class="sys-spinner"></div>
+    <div class="sys-msg" id="sysMsg">INITIALIZING...</div>
+  </div>
+</div>
+
+<!-- QR Scanner modal -->
+<div class="modal-veil hidden" id="qrModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <span>// QR_SCANNER</span>
+      <button class="icon-btn" id="closeQrModal">✕</button>
+    </div>
+    <div class="qr-video-container">
+      <video id="qrVideo" autoplay playsinline></video>
+      <div class="qr-scan-line"></div>
+    </div>
+    <p class="modal-sub">— OR PASTE LINK BELOW —</p>
+    <input type="text" class="mono-input" id="qrLinkInput" placeholder="https://...?room=XXX-XXX"/>
+    <button class="cta-btn cta-green" id="qrLinkJoinBtn" style="width:100%;margin-top:8px">
+      JOIN FROM LINK
+    </button>
+  </div>
+</div>
+
+<!-- Toast stack -->
+<div class="toast-stack" id="toastStack"></div>
+
+<script type="module" src="js/mind.js"></script>
+</body>
+</html>
