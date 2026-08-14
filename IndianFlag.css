@@ -1,4 +1,4 @@
-  *
+*
 {
     margin: 0;
     padding: 0;
@@ -32,6 +32,7 @@ body
     border-top: 100px solid #ff9933;
     border-bottom: 100px solid #138808;
     box-sizing: border-box;
+    -webkit-filter: url(#wavy);
     filter: url(#wavy);
 }
 .flag::after
@@ -43,6 +44,7 @@ body
     width: 50%;
     height: 100%;
     background: rgba(255, 255, 255, 0.2);
+    -webkit-filter: url(#wavy);
     filter: url(#wavy);
 }
 .flag img
